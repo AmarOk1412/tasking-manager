@@ -36,6 +36,22 @@ export default defineMessages({
     id: 'user.gender',
     defaultMessage: 'Gender',
   },
+  female: {
+    id: 'user.gender.female',
+    defaultMessage: 'Female',
+  },
+  male: {
+    id: 'user.gender.male',
+    defaultMessage: 'Male',
+  },
+  preferNotToSay: {
+    id: 'user.gender.preferNotToSay',
+    defaultMessage: 'Prefer not to say',
+  },
+  selfDescribe: {
+    id: 'user.gender.selfDescribe',
+    defaultMessage: 'Prefer to self-describe:',
+  },
   slackUsername: {
     id: 'user.slack',
     defaultMessage: 'Username on HOT Slack',
@@ -201,6 +217,18 @@ export default defineMessages({
   osmHeatMap: {
     id: 'user.osm.heatMap.link',
     defaultMessage: 'Edit heat map',
+  },
+  apiKey: {
+    id: 'user.settings.apiKey.title',
+    defaultMessage: 'API Key',
+  },
+  apiDocs: {
+    id: 'user.settings.apiDocs',
+    defaultMessage: 'API Documentation',
+  },
+  apiKeyDescription: {
+    id: 'user.settings.apiKey.description',
+    defaultMessage: 'With this API Key, you can authenticate and use all the resources of the Tasking Manager API. For more details, checkout the {link}.',
   },
 });
 // It will be useful when we enable the placeholders

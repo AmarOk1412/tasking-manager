@@ -1,11 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage, FormattedNumber, FormattedRelative } from 'react-intl';
+import { useCopyClipboard } from '@lokibai/react-use-copy-clipboard';
 
 import messages from './messages';
 import { UserAvatar } from './avatar';
-import { MappingIcon, LinkIcon } from '../svgIcons';
+import { MappingIcon, LinkIcon, ClipboardIcon } from '../svgIcons';
 import { Button } from '../button';
 import { fetchLocalJSONAPI } from '../../network/genericJSONRequest';
+
+
+export function APIKeyCard({token}) {
+  //eslint-disable-next-line
+  const [isCopied, setCopied] = useCopyClipboard();
+
+  const handleClick = () => {
+      setCopied(`Token ${token}`);
+  };
+  const link = <a className="link red" href="/api-docs/" target="_blank">
+    <FormattedMessage {...messages.apiDocs} />
+  </a>;
+  return (
+    <div className="cf bg-white shadow-4 pa4 mb3">
+      <h3 className="f3 blue-dark mt0 fw6">
+        <FormattedMessage {...messages.apiKey} />
+      </h3>
+      <div className="cf">
+        <pre className="f6 di bg-tan blue-grey pa2">Token {token}</pre>
+        <span className="pointer pl2 blue-light hover-blue-dark di" title="Copy Token">
+          <ClipboardIcon width="18px" height="18px" onClick={handleClick} />
+        </span>
+        <p className="f6 blue-grey pt3">
+          <FormattedMessage
+            {...messages.apiKeyDescription}
+            values={{link: link}}
+          />
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export function OSMCard({ username }: Object) {
   const [accountCreated, setAccountCreated] = useState(new Date());
@@ -26,7 +59,7 @@ export function OSMCard({ username }: Object) {
   }, [username]);
 
   return (
-    <div className="cf bg-white shadow-4 pa4 mv4">
+    <div className="cf bg-white shadow-4 pa4 mb3">
       <h3 className="f3 blue-dark mt0 fw6">
         <FormattedMessage {...messages.osmCardTitle} />
       </h3>

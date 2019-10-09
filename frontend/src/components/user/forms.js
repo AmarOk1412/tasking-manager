@@ -118,16 +118,20 @@ class UserInformationForm extends React.Component {
                     <div>
                       <label className={labelClasses}><FormattedMessage {...messages.gender} /></label>
                       <div style={radioButtonStyle}>
-                        <Field name="gender" component="input" type="radio" value="FEMALE"/>{' '} Female
+                        <Field name="gender" component="input" type="radio" value="FEMALE"/>
+                        {' '} <FormattedMessage {...messages.female} />
                       </div>
                       <div style={radioButtonStyle}>
-                        <Field name="gender" component="input" type="radio" value="MALE"/>{' '} Male
+                        <Field name="gender" component="input" type="radio" value="MALE"/>
+                        {' '} <FormattedMessage {...messages.male} />
                       </div>
                       <div style={radioButtonStyle}>
-                        <Field name="gender" component="input" type="radio" value="PREFER_NOT"/>{' '} Prefer not to say
+                        <Field name="gender" component="input" type="radio" value="PREFER_NOT"/>
+                        {' '} <FormattedMessage {...messages.preferNotToSay} />
                       </div>
                       <div style={radioButtonStyle}>
-                        <Field name="gender" component="input" type="radio" value="SELF_DESCRIBE"/>{' '} Prefer to self-describe:
+                        <Field name="gender" component="input" type="radio" value="SELF_DESCRIBE"/>
+                        {' '} <FormattedMessage {...messages.selfDescribe} />
                       </div>
                         <Field name="gender" subscription={{ value: true }}>
                           {({ input: { value } }) => (value === 'SELF_DESCRIBE' ? (
