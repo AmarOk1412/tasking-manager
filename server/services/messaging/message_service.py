@@ -4,6 +4,7 @@ import time
 from cachetools import TTLCache, cached
 from typing import List
 from flask import current_app
+from sqlalchemy import text
 
 from server import create_app, db
 from server.models.dtos.message_dto import MessageDTO, MessagesDTO
@@ -14,6 +15,7 @@ from server.models.postgis.task import TaskStatus
 from server.services.messaging.smtp_service import SMTPService
 from server.services.messaging.template_service import get_template, get_profile_url
 from server.services.users.user_service import UserService, User
+from server.services.project_service import Project
 
 
 message_cache = TTLCache(maxsize=512, ttl=30)
@@ -180,6 +182,17 @@ class MessageService:
             message.add_message()
             SMTPService.send_email_alert(user.email_address, user.username)
 
+    @staticmethod
+    def send_favorite_project_activities(user_id: int):
+        current_app.logger.debug("Sending Favorite Project Activities")
+        favorited_projects = UserService.get_projects_favorited(user_id)
+        contributed_projects = UserService.get_projects_mapped(user_id)
+        projects_list = contributed_projects
+        for favorited_project in favorited_projects.favorited_projects:
+            print(favorited_project.project_id)
+            projects_list.append(favorited_project.project_id)
+        print(projects_list)
+    
     @staticmethod
     def resend_email_validation(user_id: int):
         """ Resends the email validation email to the logged in user """
