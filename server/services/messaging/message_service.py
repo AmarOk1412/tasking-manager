@@ -129,29 +129,58 @@ class MessageService:
     ):
         """ Will send a canned message to anyone @'d in a comment """
         usernames = MessageService._parse_message_for_username(comment)
+        # if len(usernames) == 0:
+        #     return  # Nobody @'d so return
 
-        if len(usernames) == 0:
-            return  # Nobody @'d so return
+        if len(usernames) != 0:
+            task_link = MessageService.get_task_link(project_id, task_id)
+            # project_title = ProjectService.get_project_title(project_id)
+            for username in usernames:
 
-        task_link = MessageService.get_task_link(project_id, task_id)
-        # project_title = ProjectService.get_project_title(project_id)
-        for username in usernames:
+                try:
+                    user = UserService.get_user_by_username(username)
+                except NotFound:
+                    continue  # If we can't find the user, keep going no need to fail
 
-            try:
-                user = UserService.get_user_by_username(username)
-            except NotFound:
-                continue  # If we can't find the user, keep going no need to fail
+                message = Message()
+                message.message_type = MessageType.MENTION_NOTIFICATION.value
+                message.project_id = project_id
+                message.task_id = task_id
+                message.from_user_id = comment_from
+                message.to_user_id = user.id
+                message.subject = f"You were mentioned in a comment in Project {project_id} on {task_link}"
+                message.message = comment
+                message.add_message()
+                SMTPService.send_email_alert(user.email_address, user.username)
 
-            message = Message()
-            message.message_type = MessageType.MENTION_NOTIFICATION.value
-            message.project_id = project_id
-            message.task_id = task_id
-            message.from_user_id = comment_from
-            message.to_user_id = user.id
-            message.subject = f"You were mentioned in a comment in Project {project_id} on {task_link}"
-            message.message = comment
-            message.add_message()
-            SMTPService.send_email_alert(user.email_address, user.username)
+        query = """ select user_id from task_history where project_id = :project_id and task_id = :task_id
+                    and action = 'STATE_CHANGE'"""
+        result = db.engine.execute(text(query), project_id=project_id, task_id=task_id)
+        print(result)
+        result = result[0]
+        contributed_users = [r[0] for r in result]
+
+        if len(contributed_users) != 0:
+            task_link = MessageService.get_task_link(project_id, task_id)
+            # project_title = ProjectService.get_project_title(project_id)
+            for user_id in contributed_users:
+
+                try:
+                    user = UserService.get_user_dto_by_id(user_id)
+                except NotFound:
+                    continue  # If we can't find the user, keep going no need to fail
+
+                message = Message()
+                message.message_type = MessageType.TASK_NOTIFICATION.value
+                message.project_id = project_id
+                message.task_id = task_id
+                message.to_user_id = user.id
+                message.subject = f"{comment_from} left a comment in Project {project_id} on {task_link}"
+                message.message = comment
+                message.add_message()
+                SMTPService.send_email_alert(user.email_address, user.username)
+
+
 
     @staticmethod
     def send_message_after_chat(chat_from: int, chat: str, project_id: int):
@@ -192,7 +221,7 @@ class MessageService:
             print(favorited_project.project_id)
             projects_list.append(favorited_project.project_id)
         print(projects_list)
-    
+
     @staticmethod
     def resend_email_validation(user_id: int):
         """ Resends the email validation email to the logged in user """
