@@ -180,8 +180,6 @@ class MessageService:
                 message.add_message()
                 SMTPService.send_email_alert(user.email_address, user.username)
 
-
-
     @staticmethod
     def send_message_after_chat(chat_from: int, chat: str, project_id: int):
         """ Send alert to user if they were @'d in a chat message """
@@ -210,6 +208,31 @@ class MessageService:
             message.message = chat
             message.add_message()
             SMTPService.send_email_alert(user.email_address, user.username)
+
+        query = """ select user_id from project_favorites where project_id = :project_id"""
+        result = db.engine.execute(text(query), project_id=project_id)
+        print(result)
+        result = result[0]
+        favorited_users = [r[0] for r in result]
+
+        if len(favorited_users) != 0:
+            project_link = MessageService.get_project_link(project_id)
+            # project_title = ProjectService.get_project_title(project_id)
+            for user_id in favorited_users:
+
+                try:
+                    user = UserService.get_user_dto_by_id(user_id)
+                except NotFound:
+                    continue  # If we can't find the user, keep going no need to fail
+
+                message = Message()
+                message.message_type = MessageType.CHAT_NOTIFICATION.value
+                message.project_id = project_id
+                message.to_user_id = user.id
+                message.subject = f"{chat_from} left a comment in Project {project_link}"
+                message.message = chat
+                message.add_message()
+                SMTPService.send_email_alert(user.email_address, user.username)
 
     @staticmethod
     def send_favorite_project_activities(user_id: int):
