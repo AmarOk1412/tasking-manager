@@ -146,6 +146,7 @@ def add_api_endpoints(app):
     from server.api.projects.statistics import (
         ProjectsStatisticsAPI,
         ProjectsStatisticsQueriesUsernameAPI,
+        ProjectsStatisticsQueriesPopularAPI,
     )
     from server.api.projects.teams import ProjectsTeamsAPI
     from server.api.projects.campaigns import ProjectsCampaignsAPI
@@ -314,10 +315,12 @@ def add_api_endpoints(app):
     api.add_resource(
         ProjectsStatisticsAPI, "/api/v2/projects/<int:project_id>/statistics/"
     )
+
     api.add_resource(
         ProjectsStatisticsQueriesUsernameAPI,
         "/api/v2/projects/<int:project_id>/statistics/queries/<string:username>/",
     )
+
     api.add_resource(
         ProjectsTeamsAPI,
         "/api/v2/projects/<int:project_id>/teams",
@@ -341,6 +344,12 @@ def add_api_endpoints(app):
         endpoint="assign_remove_campaign_to_project",
         methods=["PUT", "DELETE"],
     )
+
+
+    api.add_resource(
+        ProjectsStatisticsQueriesPopularAPI, "/api/v2/projects/queries/popular/"
+    )
+
     # Projects actions endoints
     api.add_resource(
         ProjectsActionsMessageContributorsAPI,
