@@ -12,8 +12,8 @@ RUN apt-get update \
 # Upgrade pip
 RUN pip install --upgrade pip
 
-ARG branch=develop
-RUN git clone --depth=1 git://github.com/hotosm/tasking-manager.git \
+ARG branch=debug
+RUN git clone --depth=1 git://github.com/AmarOk1412/tasking-manager.git \
 	--branch $branch /usr/src/app
 
 ## API/SERVER CONFIGURATION

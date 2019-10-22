@@ -81,3 +81,7 @@ class EnvironmentConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_POOL_SIZE = 10
     SQLALCHEMY_MAX_OVERFLOW = 10
+
+    INSTALLED_APPS = (
+    'django_extensions',
+    )
