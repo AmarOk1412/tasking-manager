@@ -25,7 +25,12 @@ def upgrade():
         sa.Column("name", sa.String(length=512), nullable=False),
         sa.Column("logo", sa.String(), nullable=True),
         sa.Column("url", sa.String(), nullable=True),
-        sa.Column("visibility", sa.Integer(), nullable=False, server_default=str(OrganisationVisibility.SECRET.value)),
+        sa.Column(
+            "visibility",
+            sa.Integer(),
+            nullable=False,
+            server_default=str(OrganisationVisibility.SECRET.value),
+        ),
         sa.PrimaryKeyConstraint("id")
         # ,
         # sa.UniqueConstraint("name"),
@@ -45,7 +50,12 @@ def upgrade():
         sa.Column("logo", sa.String(), nullable=True),
         sa.Column("description", sa.String(), nullable=True),
         sa.Column("invite_only", sa.Boolean(), nullable=False),
-        sa.Column("visibility", sa.Integer(), nullable=False, server_default=str(TeamVisibility.SECRET.value)),
+        sa.Column(
+            "visibility",
+            sa.Integer(),
+            nullable=False,
+            server_default=str(TeamVisibility.SECRET.value),
+        ),
         sa.ForeignKeyConstraint(
             ["organisation_id"], ["organisations.id"], name="fk_organisations"
         ),
@@ -133,7 +143,9 @@ def upgrade():
     conn = op.get_bind()
 
     # Content migration: Migrate the campaigns tag in campaigns table
-    campaigns = conn.execute("select campaigns from tags where campaigns is not null").fetchall()
+    campaigns = conn.execute(
+        "select campaigns from tags where campaigns is not null"
+    ).fetchall()
 
     # This will be used to consolidate the data in tags table
     dictionaries = {"HOTOSM": {"HOTOSM", "HOT-OSM"}, "ABC": {"abc", "ABc"}}
@@ -148,16 +160,18 @@ def upgrade():
         op.execute(query)
 
     # Migrate the organisations tag in organisations table
-    organisations = conn.execute("select organisations from tags where organisations is not null").fetchall()
+    organisations = conn.execute(
+        "select organisations from tags where organisations is not null"
+    ).fetchall()
 
     # This will be used to consolidate the data in the tags table
     org_dictionaries = {"HOTOSM": {"HOTOSM", "HOT-OSM"}, "ABC": {"abc", "ABc"}}
 
     for org in organisations:
         result = org[0]
-        if result.startswith('\'') or result.startswith('"'):
+        if result.startswith("'") or result.startswith('"'):
             print(result)
-            result = result[1: len(result) - 1]
+            result = result[1 : len(result) - 1]
         for org_key, org_values in org_dictionaries.items():
             if result in org_values:
                 result = org_key
