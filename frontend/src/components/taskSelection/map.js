@@ -3,18 +3,8 @@ import { extent } from 'geojson-bounds';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-import { MAPBOX_TOKEN } from '../../config';
+import { MAPBOX_TOKEN, TASK_COLOURS } from '../../config';
 import lock from '../../assets/img/lock.png';
-
-export const colours = {
-  'READY': '#fff',
-  'LOCKED_FOR_MAPPING': '#fff',
-  'MAPPED': '#a1d7e5',
-  'LOCKED_FOR_VALIDATION': '#a1d7e5',
-  'VALIDATED': '#6cb570',
-  'INVALIDATED': '#e6e6e6',
-  'BADIMAGERY': '#e04141',
-};
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
@@ -83,13 +73,13 @@ export const TasksMap = ({
           'fill-color': [
             'match',
             ['get', 'taskStatus'],
-            'READY', colours.READY,
-            'LOCKED_FOR_MAPPING', colours.LOCKED_FOR_MAPPING,
-            'MAPPED', colours.MAPPED,
-            'LOCKED_FOR_VALIDATION', colours.LOCKED_FOR_VALIDATION,
-            'VALIDATED', colours.VALIDATED,
-            'INVALIDATED', colours.INVALIDATED,
-            'BADIMAGERY', colours.BADIMAGERY,
+            'READY', TASK_COLOURS.READY,
+            'LOCKED_FOR_MAPPING', TASK_COLOURS.LOCKED_FOR_MAPPING,
+            'MAPPED', TASK_COLOURS.MAPPED,
+            'LOCKED_FOR_VALIDATION', TASK_COLOURS.LOCKED_FOR_VALIDATION,
+            'VALIDATED', TASK_COLOURS.VALIDATED,
+            'INVALIDATED', TASK_COLOURS.INVALIDATED,
+            'BADIMAGERY', TASK_COLOURS.BADIMAGERY,
             'rgba(0,0,0,0)'
           ]
         }

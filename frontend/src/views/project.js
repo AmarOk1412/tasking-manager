@@ -1,8 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+
 import { ProjectNav } from '../components/projects/projectNav';
 import { MoreFiltersForm } from '../components/projects/moreFiltersForm';
-
+import { ProjectCardPaginator } from '../components/projects/projectCardPaginator';
+import { ProjectSearchResults } from '../components/projects/projectSearchResults';
+import { ProjectsMap } from '../components/projects/projectsMap';
 import {
   useProjectsQueryAPI,
   useExploreProjectsQueryParams,
@@ -10,10 +13,6 @@ import {
 } from '../hooks/UseProjectsQueryAPI';
 import { useTagAPI } from '../hooks/UseTagAPI';
 import useForceUpdate from '../hooks/UseForceUpdate';
-
-import { ProjectCardPaginator } from '../components/projects/projectCardPaginator';
-import { ProjectSearchResults } from '../components/projects/projectSearchResults';
-import { ProjectsMap } from '../components/projects/projectsMap';
 
 export const ProjectsPage = props => {
   const initialData = {
