@@ -345,7 +345,6 @@ def add_api_endpoints(app):
         methods=["PUT", "DELETE"],
     )
 
-
     api.add_resource(
         ProjectsStatisticsQueriesPopularAPI, "/api/v2/projects/queries/popular/"
     )
